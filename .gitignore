@@ -1,7 +1,7 @@
 *.class
 
 # eclipse
-.classpath
+#.classpath
 
 # Package Files #
 #*.jar
