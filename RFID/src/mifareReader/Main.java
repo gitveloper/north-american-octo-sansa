@@ -20,7 +20,7 @@ public class Main {
 		}
 		
 		
-//		new ReaderGUI(new ReaderHandler());
+		new ReaderGUI(new ReaderHandler());
 	}
 
 }
