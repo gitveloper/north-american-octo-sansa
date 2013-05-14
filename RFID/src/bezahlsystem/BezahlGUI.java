@@ -34,6 +34,7 @@ public class BezahlGUI extends JFrame {
 	private int b_height = 20;
 	private int b_width = 100;
 	
+	
 	public BezahlGUI(){
 		createGUI();
 	}
@@ -45,7 +46,7 @@ public class BezahlGUI extends JFrame {
 		this.getContentPane().add(panel);
 	
 		
-		//create buttons
+		//Buttons erstellen
 		bget_credit = new JButton("Get Credit");
 		bget_credit.setBounds(20, 50, b_width, b_height);
 		panel.add(bget_credit);
@@ -59,7 +60,7 @@ public class BezahlGUI extends JFrame {
 		panel.add(bpay);
 		
 		
-		//create textField
+		//Textfelder erstellen
 		tcredit = new JTextField("<Credit>");
 		tcredit.setEditable(false);
 		tcredit.setBounds(160, 50, b_width, b_height);
@@ -86,7 +87,7 @@ public class BezahlGUI extends JFrame {
 		panel.add(tlast_name);
 		
 		
-		//create label
+		//Labels erstellen
 		lsuccess_msg = new JLabel("<success msg>");
 		lsuccess_msg.setBounds(300, 80, b_width*2, b_height);
 		panel.add(lsuccess_msg);
@@ -99,11 +100,11 @@ public class BezahlGUI extends JFrame {
 		llast_name.setBounds(300, 20, b_width, b_height);
 		panel.add(llast_name);
 		
-		//add textarea
+		//Textfenster hinzufügen
 		panel.add(addTextArea());
 		
 		
-		//create menuBar
+		//MenuBar erstellen
 		menuBar = new JMenuBar();
 		JMenu menu = new JMenu("File");
 		menu.setMnemonic(KeyEvent.VK_F);
@@ -111,7 +112,7 @@ public class BezahlGUI extends JFrame {
 		this.setJMenuBar(menuBar);
 		
 		
-		//create menuItems
+		//MenuItems erstellen
 		new_db = new JMenuItem("New DB", KeyEvent.VK_N);
 		menu.add(new_db);
 		set_db = new JMenuItem("Set DB", KeyEvent.VK_S);
@@ -122,7 +123,7 @@ public class BezahlGUI extends JFrame {
 		open_admin = new JMenuItem("open admin", KeyEvent.VK_O);
 		admin.add(open_admin);
 	
-		//create listener
+		//Ausführen bei Knopfdruck: "New DB"
 		 new_db.addActionListener(new ActionListener(){
 			  public void actionPerformed(ActionEvent e) {
 			   textarea.append("new_db pressed");
@@ -130,7 +131,7 @@ public class BezahlGUI extends JFrame {
 			  }
 		 	}	  
 		 );
-		 
+		//Ausführen bei Knopfdruck: "open admin"
 		 open_admin.addActionListener(new ActionListener(){
 			  public void actionPerformed(ActionEvent e) {
 				 
