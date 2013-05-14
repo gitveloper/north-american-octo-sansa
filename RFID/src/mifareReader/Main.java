@@ -10,7 +10,17 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new ReaderGUI(new ReaderHandler());
+		
+		
+		if(System.getProperty("os.arch").contains("64")) {
+			System.setProperty( "java.library.path", "RFID/_rxtx" );
+			System.out.println("64 bit " + System.getProperty("os.arch"));
+		} else {
+			
+		}
+		
+		
+//		new ReaderGUI(new ReaderHandler());
 	}
 
 }
