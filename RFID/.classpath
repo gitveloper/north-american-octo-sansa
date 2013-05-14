@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="E:/!Eigene Dateien/workspace/.git/north-american-octo-sansa/RFID/_rxtx/RXTXcomm.jar">
+	<classpathentry kind="lib" path="/_rxtx/RXTXcomm.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="E:/!Eigene Dateien/workspace/.git/north-american-octo-sansa/RFID/_rxtx/libs-64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/workspace/.git/north-american-octo-sansa/RFID/_rxtx/libs-64"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
