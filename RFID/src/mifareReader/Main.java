@@ -17,7 +17,7 @@ public class Main {
 			System.out.println("64 bit " + System.getProperty("os.arch"));
 			new ReaderGUI(new ReaderHandler());
 		} else {
-			
+			System.out.println("BWHAHAHA");
 		}
 		
 		
