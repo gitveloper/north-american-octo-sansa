@@ -13,7 +13,7 @@ public class Main {
 		
 		
 		if(System.getProperty("os.arch").contains("64")) {
-			System.setProperty( "java.library.path", "RFID/_rxtx" );
+			System.setProperty( "java.library.path", "RFID/_rxtx/libs-32/" );
 			System.out.println("64 bit " + System.getProperty("os.arch"));
 		} else {
 			
