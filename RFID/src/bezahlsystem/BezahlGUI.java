@@ -1,5 +1,6 @@
 package bezahlsystem;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -27,7 +28,7 @@ public class BezahlGUI extends JFrame {
 	private JLabel lsuccess_msg, lfirst_name, llast_name;
 	private JMenuBar menuBar;
 	private JMenu admin;
-	private JMenuItem new_db, set_db, open_admin;
+	private JMenuItem new_db, set_db, open_admin,open_db;
 	private JTextArea textarea;
 	private JScrollPane scrollpane;
 	
@@ -89,6 +90,7 @@ public class BezahlGUI extends JFrame {
 		
 		//Labels erstellen
 		lsuccess_msg = new JLabel("<success msg>");
+		lsuccess_msg.setForeground(Color.GREEN);
 		lsuccess_msg.setBounds(300, 80, b_width*2, b_height);
 		panel.add(lsuccess_msg);
 		
@@ -120,9 +122,11 @@ public class BezahlGUI extends JFrame {
 		
 		admin = new JMenu("admin");
 		menuBar.add(admin);
-		open_admin = new JMenuItem("open admin", KeyEvent.VK_O);
+		open_admin = new JMenuItem("open Admin", KeyEvent.VK_A);
 		admin.add(open_admin);
-	
+		open_db = new JMenuItem("open DB", KeyEvent.VK_D);
+		admin.add(open_db);
+		
 		//Ausführen bei Knopfdruck: "New DB"
 		 new_db.addActionListener(new ActionListener(){
 			  public void actionPerformed(ActionEvent e) {
