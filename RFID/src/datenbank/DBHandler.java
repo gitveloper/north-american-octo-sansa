@@ -25,7 +25,7 @@ public class DBHandler {
 		return conn;
 	}
 	
-	public double addGuthaben(Connection conn, Double guth, Integer kundenNr){
+	public double addGuthaben(Connection conn, double guth, Integer kundenNr){
 		double guthaben_neu = 0.00;
 		
 		try{
@@ -43,10 +43,144 @@ public class DBHandler {
 			}catch (Exception e) {
 	            e.printStackTrace();
 	        }
+		
 			return guthaben_neu;
 		
 	}
 	
+	public boolean payBill(Connection conn, double bill, Integer kundenNr){
+		Boolean fin = false;
+		
+		try{
+			Statement stmt = conn.createStatement();
+			String getQuery = "SELECT Guthaben FROM Kunden WHERE KundenNr = "+kundenNr;
+			ResultSet selectRS = stmt.executeQuery(getQuery);
+			selectRS.next();
+			double guthaben_neu = selectRS.getDouble(1)-bill;
+			
+			String addQuery = "UPDATE Kunden SET Guthaben ="+guthaben_neu+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;
+		}catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return fin;
+				
+	}
 	
+	public double getGuthaben(Connection conn, Integer kundenNr){
+		double guthaben = 0.00;
+		
+		try{
+			Statement stmt = conn.createStatement();
+			String getQuery = "SELECT Guthaben FROM Kunden WHERE KundenNr = "+kundenNr;
+			ResultSet selectRS = stmt.executeQuery(getQuery);
+			selectRS.next();
+			guthaben = selectRS.getDouble(1);
+			
+		}catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+		return guthaben;
+				
+	}
+	
+	public boolean setGuthaben(Connection conn, double guth, Integer kundenNr){
+		boolean fin = false;;
+		
+		try{
+			Statement stmt = conn.createStatement();
+		
+			String addQuery = "UPDATE Kunden SET Guthaben ="+guth+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;			
+	        
+			}catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		
+			return fin;
+		
+	}
+	
+	public boolean setName(Connection conn, String name, Integer kundenNr){
+		boolean fin = false;;
+		
+		try{
+			Statement stmt = conn.createStatement();
+		
+			String addQuery = "UPDATE Kunden SET Name ="+name+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;			
+	        
+			}catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		
+			return fin;
+		
+	}
+	
+	public boolean setVorname(Connection conn, String vorname, Integer kundenNr){
+		boolean fin = false;;
+		
+		try{
+			Statement stmt = conn.createStatement();
+		
+			String addQuery = "UPDATE Kunden SET Vorname ="+vorname+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;			
+	        
+			}catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		
+			return fin;
+		
+	}
+	
+	public boolean setStr(Connection conn, String str, Integer kundenNr){
+		boolean fin = false;;
+		
+		try{
+			Statement stmt = conn.createStatement();
+		
+			String addQuery = "UPDATE Kunden SET Str ="+str+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;			
+	        
+			}catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		
+			return fin;
+		
+	}
 
+	public boolean setPlz(Connection conn, Integer plz, Integer kundenNr){
+		boolean fin = false;;
+		
+		try{
+			Statement stmt = conn.createStatement();
+		
+			String addQuery = "UPDATE Kunden SET Plz ="+plz+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;			
+	        
+			}catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		
+			return fin;
+		
+	}
+	
 }
