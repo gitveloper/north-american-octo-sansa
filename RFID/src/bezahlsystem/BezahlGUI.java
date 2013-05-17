@@ -16,8 +16,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import datenbank.DBHandler;
+
 import mifareReader.ReaderGUI;
 import mifareReader.handler.ReaderHandler;
+import mifareReader.misc.CodeCommands;
 
 
 public class BezahlGUI extends JFrame {
@@ -35,12 +38,28 @@ public class BezahlGUI extends JFrame {
 	private int b_height = 20;
 	private int b_width = 100;
 	
+	private ReaderHandler handler;
+	private DBHandler db;
+	
+	private int nameIndex = 1;
+	private int vornameIndex = 2;
+	private int strIndex = 3;
+	private int kundennrIndex = 4;
+	private int guthabenIndex = 5;
+	private int transIndex = 6;
+	
 	
 	public BezahlGUI(){
-		createGUI();
+		
+	}
+	public BezahlGUI(ReaderHandler rh, DBHandler database){
+		createGUI(rh, database);
 	}
 
-	private void createGUI() {
+	private void createGUI(ReaderHandler rh, DBHandler database) {
+		
+		this.handler = rh;
+		this.db = database;
 		
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -142,9 +161,42 @@ public class BezahlGUI extends JFrame {
 				  login login= new login();
 				  
 				}
-			 	}	  
-			 );
+			 }	  
+		);
 			
+		bget_credit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				textarea.append("retrieving data from card");
+
+					if (handler.isConnected()) {
+						handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
+
+						if (handler.snAvailable()) {
+							handler.selectCard(CodeCommands.Select_Card.getCode());
+						}
+						handler.authenticateKey(
+							CodeCommands.AUTHENTICATE_WITH_KEY.getCode(),
+							0x60, "FFFFFFFFFFFF",
+							33);
+						
+						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),nameIndex);						
+						tfirst_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+						
+						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),vornameIndex);						
+						tlast_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+						
+						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),guthabenIndex);						
+						tcredit.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+					
+					
+					}
+				textarea.append("retrieving data complete");	
+								
+			}
+		});
 			 
 		
 		
