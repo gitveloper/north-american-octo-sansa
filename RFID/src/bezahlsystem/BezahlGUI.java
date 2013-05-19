@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -38,7 +39,7 @@ public class BezahlGUI extends JFrame {
 	private int b_height = 20;
 	private int b_width = 100;
 	
-	private ReaderHandler handler;
+	public static ReaderHandler handler;
 	private DBHandler db;
 	
 	private int nameIndex = 1;
@@ -169,34 +170,44 @@ public class BezahlGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				textarea.append("retrieving data from card"+"\n");
+				if (!handler.isConnected()) {
+					String port = JOptionPane.showInputDialog(null,
+							"Available ports: " + handler.showAvailablePorts(),
+							handler.getDefaultPort());
+					if (port != null) {
+						if (handler.showAvailablePorts().contains(port)) {
+							handler.start(port);
+							handler.reset(CodeCommands.RESET.getCode());
+					
 
-					if (handler.isConnected()) {
-						handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
+							textarea.append(handler.showSerialPortInfo() + "\n");
+							textarea.append("Connected...\n");
 
-						if (handler.snAvailable()) {
-							handler.selectCard(CodeCommands.Select_Card.getCode());
+						} else {
+							textarea.append("Port [" + port + "] not available!\n");
 						}
-						handler.authenticateKey(
-							CodeCommands.AUTHENTICATE_WITH_KEY.getCode(),
-							0x60, "FFFFFFFFFFFF",
-							33);
-						
-						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),nameIndex);						
-						tfirst_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
-						
-						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),vornameIndex);						
-						tlast_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
-						
-						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),guthabenIndex);						
-						tcredit.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
-					
-						textarea.append("retrieving data complete");
-					}else{
-						textarea.append("no handler connected"+"\n");
 					}
+				} else {
+					textarea.append("Already connected!\n");
+				}
+				
+				if (handler.isConnected()) {
+					handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
+
+					if (handler.cardDetected()) {
+						textarea.append((handler.showSerialnumber())
+								.toUpperCase());
+
+						textarea.append("Card with S/N("
+								+ (handler.showSerialnumber()).toUpperCase()
+								+ ") selected!\n");
+					} else {
+						textarea.append("No tag found!\n");
+					}
+				}
+
 					
-								
+					
 			}
 		});
 			 
@@ -256,7 +267,7 @@ class login extends JFrame {
 		 login.setBounds(20, 20, b_width, b_height);
 		 panel.add(login);
 		   
-		 login_text = new JTextField();
+		 login_text = new JTextField("admin");
 		 login_text.setBounds(140, 20, b_width, b_height);
 		 login_text.setEditable(true);
 		 login_text.setCaretPosition(0);
@@ -266,7 +277,7 @@ class login extends JFrame {
 			  public void actionPerformed(ActionEvent e) {
 				  
 				  if(pw.equals(login_text.getText())){
-					  ReaderGUI readgui = new ReaderGUI(new ReaderHandler());
+					  ReaderGUI readgui = new ReaderGUI(BezahlGUI.handler);
 					close();
 				  }
 				  else{
