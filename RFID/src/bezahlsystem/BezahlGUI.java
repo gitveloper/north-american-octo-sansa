@@ -193,6 +193,7 @@ public class BezahlGUI extends JFrame {
 				
 				if (handler.isConnected()) {
 					handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
+					textarea.append(CodeCommands.ANTI_COLLISION.getCode()+"\n");
 
 					if (handler.cardDetected()) {
 						textarea.append((handler.showSerialnumber())
@@ -207,7 +208,7 @@ public class BezahlGUI extends JFrame {
 				}
 
 					
-					
+				handler.reset(CodeCommands.RESET.getCode());		
 			}
 		});
 			 
