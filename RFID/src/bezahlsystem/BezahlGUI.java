@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -178,27 +181,43 @@ public class BezahlGUI extends JFrame {
 									CodeCommands.AUTHENTICATE_WITH_KEY
 											.getCode(), 0x60, "FFFFFFFFFFFF", 33);
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
-									1);
+									nameIndex);
 							tfirst_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							textarea.append("Name: "+tfirst_name.getText()+"\n");
 
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
-									2);
+									vornameIndex);
 							tlast_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							textarea.append("Vorname: "+tlast_name.getText()+"\n");
 							
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
-									5);
+									kundennrIndex);
 							
 							String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
 							int kundenNr = Integer.valueOf(nr);
 							
-							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
-									6);
-							tcredit.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
-							textarea.append("Guthaben: "+tcredit.getText()+"\n");
-							
 							double guthaben = db.getGuthaben(conn, kundenNr);
+							
+							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+									6);							
+							double guthaben_karte = Double.valueOf(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+							
+							
+							if(guthaben == guthaben_karte){
+								textarea.append("Guthaben: "+guthaben+"\n");
+								tcredit.setText(String.valueOf(guthaben));
+								lsuccess_msg.setText("Kartendaten OK"); lsuccess_msg.setForeground(Color.GREEN);
+								
+							}else{
+								textarea.append("Das Guthaben auf der Karte stimmt nicht mit der Datenbank überein"+"\n");
+								textarea.append("Guthaben: "+guthaben+"\n");
+								textarea.append("Guthaben Karte: "+guthaben_karte+"\n");
+								textarea.append("Bitte verwahren sie die Karte"+"\n");
+								lsuccess_msg.setText("Guthaben error der Karte");lsuccess_msg.setForeground(Color.RED);
+								handler.reset(CodeCommands.RESET.getCode());
+							}
+							
+							
 							System.out.println(guthaben);
 							
 						}
@@ -206,57 +225,56 @@ public class BezahlGUI extends JFrame {
 				}
 			}
 		});
+		
+		badd_credit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if (handler.isConnected()) {
+					if(tcredit_add.getText().length() <= 16) {
+						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+									kundennrIndex);
+							
+						String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
+						int kundenNr = Integer.valueOf(nr);
+						double guthaben = db.getGuthaben(conn, kundenNr);
+						double add = Double.valueOf(tcredit_add.getText())+guthaben;
+						String neu = String.valueOf(add);
+						
+						handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
+								guthabenIndex, neu);
+						
+						db.addGuthaben(conn, Double.valueOf(tcredit_add.getText()), kundenNr);
+						
+						long now = System.currentTimeMillis();
+						Calendar calendar = Calendar.getInstance();
+						calendar.clear();
+				        calendar.setTimeInMillis(now);				       
+				        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+				        				        
+				        db.setTime(conn, now, kundenNr);
+				        String time = String.valueOf(now);
+				        
+				        handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
+								transIndex, time);
+				        
+				        
+						
+						textarea.append(tcredit_add.getText()+" wurde auf die Karte gebucht");
+						lsuccess_msg.setText("Buchung erfolgreich"); lsuccess_msg.setForeground(Color.GREEN);
+						
+						tcredit_add.setText("");
+						tcredit.setText(neu);
+						
+					} 
+				}
+				
+			}
+		});
 
 
-//		bget_credit.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent arg0) {
-//
-//				if (!handler.isConnected()) {
-//					String port = JOptionPane.showInputDialog(null,
-//							"Available ports: " + handler.showAvailablePorts(),
-//							handler.getDefaultPort());
-//					if (port != null) {
-//						if (handler.showAvailablePorts().contains(port)) {
-//							handler.start(port);
-//							handler.reset(CodeCommands.RESET.getCode());
-//
-//							textarea.append(handler.showSerialPortInfo() + "\n");
-//							textarea.append("Connected...\n");
-//
-//						} else {
-//							textarea.append("Port [" + port
-//									+ "] not available!\n");
-//						}
-//					}
-//				} else {
-//					textarea.append("Already connected!\n");
-//				}
-//
-//				if (handler.isConnected()) {
-//					handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
-//					textarea.append(CodeCommands.ANTI_COLLISION.getCode()+"\n");
-//
-//					if (handler.cardDetected()) {
-//						textarea.append((handler.showSerialnumber())
-//								.toUpperCase());
-//
-//						textarea.append("Card with S/N("
-//								+ (handler.showSerialnumber()).toUpperCase()
-//								+ ") selected!\n");
-//					} else {
-//						textarea.append("No tag found!\n");
-//					}
-//				}
-//
-//<<<<<<< HEAD
-//=======
-//					
-//				handler.reset(CodeCommands.RESET.getCode());		
-//>>>>>>> branch 'master' of https://github.com/gitveloper/north-american-octo-sansa.git
-//			}
-//		});
+		
 
 		this.setTitle("RFID Reader (Mifare Classic 4k)");
 		this.setLocationRelativeTo(null);

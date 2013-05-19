@@ -1,0 +1,49 @@
+05-19 11:57:55 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Unbekannter Datentyp: "AUTO_INCREMENT"
+Unknown data type: "AUTO_INCREMENT"; SQL statement:
+CREATE TABLE Kunden(ID auto_increment, Name VARCHAR(100), Vorname VARCHAR(100), Str VARCHAR(100), PLZ INT(5), KundenNr INT PRIMARY KEY NOT NULL,
+Guthaben NUMERIC(6,2) NOT NULL, Buchung INT) [50004-171]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.command.Parser.parseColumnWithType(Parser.java:3661)
+	at org.h2.command.Parser.parseColumnForTable(Parser.java:3524)
+	at org.h2.command.Parser.parseCreateTable(Parser.java:5228)
+	at org.h2.command.Parser.parseCreate(Parser.java:3813)
+	at org.h2.command.Parser.parsePrepared(Parser.java:323)
+	at org.h2.command.Parser.parse(Parser.java:278)
+	at org.h2.command.Parser.parse(Parser.java:250)
+	at org.h2.command.Parser.prepareCommand(Parser.java:217)
+	at org.h2.engine.Session.prepareLocal(Session.java:417)
+	at org.h2.engine.Session.prepareCommand(Session.java:366)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1116)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:164)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:152)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1312)
+	at org.h2.server.web.WebApp.query(WebApp.java:1002)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:965)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:954)
+	at org.h2.server.web.WebThread.process(WebThread.java:166)
+	at org.h2.server.web.WebThread.run(WebThread.java:93)
+	at java.lang.Thread.run(Unknown Source)
+05-19 15:54:55 jdbc[2]: null
+org.h2.message.DbException: Die Datenbank-Verbindung wurde nicht explizit geschlossen (jetzt in der Müllabfuhr)
+The connection was not closed by the application and is garbage collected [90018-171]
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.message.DbException.get(DbException.java:135)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:175)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:120)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:93)
+	at org.h2.Driver.connect(Driver.java:72)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:645)
+	at org.h2.server.web.WebApp.login(WebApp.java:900)
+	at org.h2.server.web.WebApp.process(WebApp.java:205)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:164)
+	at org.h2.server.web.WebThread.process(WebThread.java:137)
+	at org.h2.server.web.WebThread.run(WebThread.java:93)
+	at java.lang.Thread.run(Unknown Source)
+Caused by: org.h2.jdbc.JdbcSQLException: Die Datenbank-Verbindung wurde nicht explizit geschlossen (jetzt in der Müllabfuhr)
+The connection was not closed by the application and is garbage collected [90018-171]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	... 14 more

@@ -165,12 +165,31 @@ public class DBHandler {
 	}
 
 	public boolean setPlz(Connection conn, Integer plz, Integer kundenNr){
-		boolean fin = false;;
+		boolean fin = false;
 		
 		try{
 			Statement stmt = conn.createStatement();
 		
 			String addQuery = "UPDATE Kunden SET Plz ="+plz+" WHERE KundenNR = kundenNr";
+			stmt.executeUpdate(addQuery);
+			
+			fin = true;			
+	        
+			}catch (Exception e) {
+	            e.printStackTrace();
+	        }
+		
+			return fin;
+		
+	}
+	
+	public boolean setTime(Connection conn, Long time, Integer kundenNr){
+		boolean fin = false;
+		
+		try{
+			Statement stmt = conn.createStatement();
+		
+			String addQuery = "UPDATE Kunden SET Buchung ="+time+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			
 			fin = true;			
