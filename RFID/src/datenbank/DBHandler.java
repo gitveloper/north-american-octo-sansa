@@ -16,7 +16,7 @@ public class DBHandler {
 		Class.forName("org.h2.Driver");
         
         conn = DriverManager.getConnection(
-                "jdbc:h2:D:/Programme/H2DB/database", "sa", "");
+                "jdbc:h2:datenbank", "sa", "");
         
         
 		}catch (Exception e) {

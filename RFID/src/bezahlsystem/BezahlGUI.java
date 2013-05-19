@@ -162,6 +162,7 @@ public class BezahlGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+			
 				// TODO Auto-generated method stub
 				if (handler.isConnected()) {
 					handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
@@ -171,11 +172,23 @@ public class BezahlGUI extends JFrame {
 									.getCode());
 							handler.authenticateKey(
 									CodeCommands.AUTHENTICATE_WITH_KEY
-											.getCode(), 0x60, "FFFFFFFFFFFF", 1);
+											.getCode(), 0x60, "FFFFFFFFFFFF", 33);
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
-									0);
-							System.out.println(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+									1);
+							tfirst_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+							textarea.append("Name: "+tfirst_name.getText()+"\n");
 
+							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+									2);
+							tlast_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+							textarea.append("Vorname: "+tlast_name.getText()+"\n");
+							
+							
+							
+							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+									5);
+							tcredit.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
+							textarea.append("Guthaben: "+tcredit.getText()+"\n");
 						}
 					}
 				}
