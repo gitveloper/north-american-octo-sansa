@@ -169,7 +169,7 @@ public class BezahlGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				textarea.append("retrieving data from card");
+				textarea.append("retrieving data from card"+"\n");
 
 					if (handler.isConnected()) {
 						handler.antiCollision(CodeCommands.ANTI_COLLISION.getCode());
@@ -191,9 +191,11 @@ public class BezahlGUI extends JFrame {
 						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),guthabenIndex);						
 						tcredit.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 					
-					
+						textarea.append("retrieving data complete");
+					}else{
+						textarea.append("no handler connected"+"\n");
 					}
-				textarea.append("retrieving data complete");	
+					
 								
 			}
 		});
