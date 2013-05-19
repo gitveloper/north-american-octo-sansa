@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -44,9 +45,10 @@ public class BezahlGUI extends JFrame {
 	private int nameIndex = 1;
 	private int vornameIndex = 2;
 	private int strIndex = 3;
-	private int kundennrIndex = 4;
-	private int guthabenIndex = 5;
-	private int transIndex = 6;
+	private int plzIndex = 4;
+	private int kundennrIndex = 5;
+	private int guthabenIndex = 6;
+	private int transIndex = 7;
 
 	public BezahlGUI() {
 
@@ -60,6 +62,8 @@ public class BezahlGUI extends JFrame {
 
 		this.handler = rh;
 		this.db = database;
+		
+		final Connection conn = db.setConn();
 
 		panel = new JPanel();
 		panel.setLayout(null);
@@ -183,12 +187,20 @@ public class BezahlGUI extends JFrame {
 							tlast_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							textarea.append("Vorname: "+tlast_name.getText()+"\n");
 							
-							
-							
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 									5);
+							
+							String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
+							int kundenNr = Integer.valueOf(nr);
+							
+							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+									6);
 							tcredit.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							textarea.append("Guthaben: "+tcredit.getText()+"\n");
+							
+							double guthaben = db.getGuthaben(conn, kundenNr);
+							System.out.println(guthaben);
+							
 						}
 					}
 				}
