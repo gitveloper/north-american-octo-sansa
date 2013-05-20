@@ -251,7 +251,6 @@ public class BezahlGUI extends JFrame {
 						Calendar calendar = Calendar.getInstance();
 						calendar.clear();
 				        calendar.setTimeInMillis(now);				       
-				        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 				        				        
 				        db.setTime(conn, now, kundenNr);
 				        String time = String.valueOf(now);
@@ -268,6 +267,61 @@ public class BezahlGUI extends JFrame {
 						tcredit.setText(neu);
 						
 					} 
+				}
+				
+			}
+		});
+		
+		
+		bpay.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (handler.isConnected()) {
+					handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+							kundennrIndex);
+					String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
+					int kundenNr = Integer.valueOf(nr);
+					
+					handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
+							guthabenIndex);
+					String guth = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
+					double guthaben = Double.valueOf(guth);
+					double pay = Double.valueOf(tpay.getText());
+					
+					if(pay > guthaben){
+						textarea.append("Das Guthaben auf der Karte reicht nicht aus"+"\n");
+						textarea.append("Guthaben: "+guthaben+"\n");
+						textarea.append("Preis: "+pay+"\n");
+						textarea.append("Das Guthaben muss aufgeladen werden"+"\n");
+						lsuccess_msg.setText("Guthaben error der Karte");lsuccess_msg.setForeground(Color.RED);
+					}else{
+						guthaben = guthaben - pay;
+						String neu = String.valueOf(guthaben);
+						handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
+								guthabenIndex, neu);
+						
+						db.setGuthaben(conn, guthaben, kundenNr);
+						
+						long now = System.currentTimeMillis();
+						Calendar calendar = Calendar.getInstance();
+						calendar.clear();
+				        calendar.setTimeInMillis(now);				       
+				        				        
+				        db.setTime(conn, now, kundenNr);
+				        String time = String.valueOf(now);
+				        
+				        handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
+								transIndex, time);
+				        
+				        textarea.append(tpay.getText()+" wurde von der Karte gebucht");
+						lsuccess_msg.setText("Buchung erfolgreich"); lsuccess_msg.setForeground(Color.GREEN);
+						
+						tpay.setText("");
+						tcredit.setText(neu);
+						
+					}
+					
 				}
 				
 			}
