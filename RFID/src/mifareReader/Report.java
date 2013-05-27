@@ -1,3 +1,8 @@
+/**
+ * Report.java
+ * --------------------------
+ * Erzeugt Report Objekte.
+ */
 package mifareReader;
 
 import java.util.Arrays;
@@ -19,12 +24,12 @@ public class Report {
 	
 	/**
 	 * 
-	 * @param s
-	 * @param a
-	 * @param f
-	 * @param l
-	 * @param d
-	 * @param c
+	 * @param s SOH
+	 * @param a Adresse
+	 * @param f Funktion
+	 * @param l Laenge des Daten Arrays
+	 * @param d Daten Array
+	 * @param c CRC Sum
 	 */
 	public Report(int s, int a, int f, int l, int[] d, int[] c) {
 		this.soh = s;
@@ -37,13 +42,13 @@ public class Report {
 	
 	/**
 	 * 
-	 * @param s
-	 * @param a
-	 * @param f
-	 * @param l
-	 * @param d
-	 * @param c
-	 * @param code
+	 * @param s SOH
+	 * @param a Adresse
+	 * @param f Funktion
+	 * @param l Laenge des Daten Arrays
+	 * @param d Daten Array
+	 * @param c CRC Sum
+	 * @param code Ausloesende Funktion 
 	 */
 	public Report(int s, int a, int f, int l, int[] d, int[] c, int code) {
 		this.soh = s;

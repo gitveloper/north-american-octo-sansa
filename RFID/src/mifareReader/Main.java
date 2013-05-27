@@ -1,3 +1,8 @@
+/**
+ * Main.java
+ * --------------------------
+ * Startet das Programm
+ */
 package mifareReader;
 
 import mifareReader.handler.ReaderHandler;

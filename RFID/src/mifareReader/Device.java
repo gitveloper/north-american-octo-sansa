@@ -1,3 +1,7 @@
+/**
+ * Device.java
+ * --------------------------
+ */
 package mifareReader;
 
 import java.io.BufferedInputStream;
@@ -25,6 +29,7 @@ public class Device {
 	private SerialPort serialPort;
 	private CommPortIdentifier cpid;
 
+	// Einstellungen fuer das GNetPlus Protokoll (Entnommen aus der Dokumentation des GNetPlus Protokolls)
 	private final int baudrate = 19200;
 	private final int dataBits = SerialPort.DATABITS_8;
 	private final int stopBits = SerialPort.STOPBITS_1;
@@ -58,7 +63,7 @@ public class Device {
 	// CONNECTION
 
 	/**
-	 * 
+	 * Baut eine Verbindung zum SerialPort und damit zum Reader auf.
 	 * @param port
 	 */
 	public void connect(String port) {
@@ -72,7 +77,8 @@ public class Device {
 				serialPort.notifyOnDataAvailable(notify);
 				
 				serialPort.addEventListener(new ListenOnPort());
-
+				
+				// Erzeug Objekte (DataStreamHandler und ReportHandler)
 				setDataStreamHandler();
 				setReportHandler();
 
@@ -84,7 +90,7 @@ public class Device {
 	}
 
 	/*
-	 * 
+	 * Abbruch der Verbindung zum Reader und zuruecksetzten von Variablen
 	 */
 	public void disconnect() {
 		serialPort.removeEventListener();
@@ -98,7 +104,8 @@ public class Device {
 	}
 
 	/**
-	 * 
+	 * Methode zum die verfuegbaren SerialPorts abzufragen.
+	 * Sowie die Rueckgabe der Ports als Liste.
 	 * @return
 	 */
 	private List<String> scanAvailablePorts() {
@@ -119,7 +126,7 @@ public class Device {
 	}
 	
 	/*
-	 * 
+	 * Erzeugt ein DataSteamHandler Objekt und uebergibt den Input-/OutputStream
 	 */
 	private void setDataStreamHandler() {
 		try {
@@ -135,7 +142,7 @@ public class Device {
 	}
 
 	/*
-	 * 
+	 * Erzeugt ein ReportHandler Objekt
 	 */
 	private void setReportHandler() {
 		if (!report_handler_ready) {
@@ -148,13 +155,11 @@ public class Device {
 
 	/**
 	 * 
-	 * @param query
+	 * @param query Datenarray fuer den Reader
 	 */
 	public void query(byte[] query) {
-		try {
-			
-			System.out.println("Device.query() "+Arrays.toString(query));
-			
+		try {			
+			//System.out.println("Device.query() "+Arrays.toString(query));			
 			dsh.request(query);
 			transmitting = true;
 			listen();

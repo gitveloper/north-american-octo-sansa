@@ -1,18 +1,21 @@
+/**
+ * Query.java
+ * --------------------------
+ * Erzeugt die kompletten Packages die vom Reader empfangen werden muessen,
+ * damit eine Antwort moeglich wird.
+ */
 package mifareReader;
-
-import java.util.Arrays;
 
 import mifareReader.misc.CRC;
 
-
 public class Query {
 	
-	private int soh = 0x01;
-	private int address;
-	private int queryFunction;
-	private int dataLength;
-	private int[] dataBytes;
-	private int[] crc;
+	private int soh = 0x01; // SOH 
+	private int address; // Adresse
+	private int queryFunction; // Welche Funktion vom Reader ausgefuehrt werden soll
+	private int dataLength; // Laenge des Datenarrays
+	private int[] dataBytes; // Bytes im Datenarray
+	private int[] crc; // CRC Sum
 	
 	private byte[] query;
 	
@@ -23,13 +26,19 @@ public class Query {
 	
 	private int crc_istart = 1;
 	
+	/*
+	 * Standardkonstruktor
+	 */
 	public Query() {
 		
 	}
 	
 	/**
-	 * 
-	 * @param function
+	 * Gibt ein byte Array zurueck, welches die Daten enthaelt, 
+	 * die vom Reader empfangen werden sollen.
+	 * Ist kein Datenarray verfuegbar oder die Laenge gleich 0,
+	 * so erfolgt die Rueckgabe mit einem leeren Datenarray
+	 * @param function Funktion
 	 * @return
 	 */
 	public byte[] packageQuery(int function) {		
@@ -37,9 +46,9 @@ public class Query {
 	}
 	
 	/**
-	 * 
-	 * @param function
-	 * @param data
+	 * Packt ein byte Array das vom Reader verarbeitet werden kann.
+	 * @param function Funktion
+	 * @param data Daten
 	 * @return
 	 */
 	public byte[] packageQuery(int function, int[] data) {
@@ -78,11 +87,12 @@ public class Query {
 	}
 	
 	/**
-	 * 
-	 * @param s
-	 * @param a
-	 * @param f
-	 * @param l
+	 * Erzeugt ein Standard Package mit den grundlegenden Informationen
+	 * fuer den Reader
+	 * @param s SOH
+	 * @param a Adresse
+	 * @param f Funktion 
+	 * @param l Laenge
 	 * @return
 	 */
 	private int[] packageSegment(int s, int a, int f, int l) {
