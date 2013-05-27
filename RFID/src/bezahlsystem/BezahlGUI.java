@@ -353,10 +353,10 @@ public class BezahlGUI extends JFrame {
 
 		
 
-		this.setTitle("RFID Reader (Mifare Classic 4k)");
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+		this.setTitle("RFIDPAY");
 		this.setSize(600, 400);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
