@@ -48,36 +48,42 @@ public class DBHandler {
 		
 	}
 	
-	public boolean payBill(Connection conn, double bill, Integer kundenNr){
-		Boolean fin = false;
-		
-		try{
-			Statement stmt = conn.createStatement();
-			String getQuery = "SELECT Guthaben FROM Kunden WHERE KundenNr = "+kundenNr;
-			ResultSet selectRS = stmt.executeQuery(getQuery);
-			selectRS.next();
-			double guthaben_neu = selectRS.getDouble(1)-bill;
-			
-			String addQuery = "UPDATE Kunden SET Guthaben ="+guthaben_neu+" WHERE KundenNR = kundenNr";
-			stmt.executeUpdate(addQuery);
-			
-			fin = true;
-		}catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-		return fin;
-				
-	}
+//	public boolean payBill(Connection conn, double bill, Integer kundenNr){
+//		Boolean fin = false;
+//		
+//		try{
+//			//Statement schreiben und an DB senden
+//			Statement stmt = conn.createStatement();
+//			String getQuery = "SELECT Guthaben FROM Kunden WHERE KundenNr = "+kundenNr;
+//			ResultSet selectRS = stmt.executeQuery(getQuery);
+//			selectRS.next();
+//			//Rechnung von Guthaben aus dem Resultset verrechnen
+//			double guthaben_neu = selectRS.getDouble(1)-bill;
+//			
+//			//Neues Guthaben in die DB schreiben
+//			String addQuery = "UPDATE Kunden SET Guthaben ="+guthaben_neu+" WHERE KundenNR = kundenNr";
+//			stmt.executeUpdate(addQuery);
+//			
+//			fin = true;
+//		}catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//		
+//		return fin;
+//				
+//	}
 	
 	public double getGuthaben(Connection conn, Integer kundenNr){
 		double guthaben = 0.00;
 		
 		try{
+			//Statement schreiben und an DB senden
 			Statement stmt = conn.createStatement();
 			String getQuery = "SELECT Guthaben FROM Kunden WHERE KundenNr = "+kundenNr;
 			ResultSet selectRS = stmt.executeQuery(getQuery);
 			selectRS.next();
+			
+			//Guthaben aus Resultset holen
 			guthaben = selectRS.getDouble(1);
 			
 		}catch (Exception e) {
@@ -92,8 +98,8 @@ public class DBHandler {
 		boolean fin = false;;
 		
 		try{
-			Statement stmt = conn.createStatement();
-		
+			//Statement schreiben und an DB senden
+			Statement stmt = conn.createStatement();		
 			String addQuery = "UPDATE Kunden SET Guthaben ="+guth+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			
@@ -111,8 +117,8 @@ public class DBHandler {
 		boolean fin = false;;
 		
 		try{
-			Statement stmt = conn.createStatement();
-		
+			//Statement schreiben und an DB senden
+			Statement stmt = conn.createStatement();		
 			String addQuery = "UPDATE Kunden SET Name ="+name+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			
@@ -130,8 +136,8 @@ public class DBHandler {
 		boolean fin = false;;
 		
 		try{
-			Statement stmt = conn.createStatement();
-		
+			//Statement schreiben und an DB senden
+			Statement stmt = conn.createStatement();		
 			String addQuery = "UPDATE Kunden SET Vorname ="+vorname+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			
@@ -149,8 +155,8 @@ public class DBHandler {
 		boolean fin = false;;
 		
 		try{
-			Statement stmt = conn.createStatement();
-		
+			//Statement schreiben und an DB senden
+			Statement stmt = conn.createStatement();		
 			String addQuery = "UPDATE Kunden SET Str ="+str+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			
@@ -168,8 +174,8 @@ public class DBHandler {
 		boolean fin = false;
 		
 		try{
-			Statement stmt = conn.createStatement();
-		
+			//Statement schreiben und an DB senden
+			Statement stmt = conn.createStatement();		
 			String addQuery = "UPDATE Kunden SET Plz ="+plz+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			
@@ -187,8 +193,8 @@ public class DBHandler {
 		boolean fin = false;
 		
 		try{
-			Statement stmt = conn.createStatement();
-		
+			//Statement schreiben und an DB senden
+			Statement stmt = conn.createStatement();		
 			String addQuery = "UPDATE Kunden SET Buchung ="+time+" WHERE KundenNR = kundenNr";
 			stmt.executeUpdate(addQuery);
 			

@@ -177,32 +177,41 @@ public class BezahlGUI extends JFrame {
 						if (handler.snAvailable()) {
 							handler.selectCard(CodeCommands.Select_Card
 									.getCode());
+							
+							//authentifizieren der des Sektors der Karte
 							handler.authenticateKey(
 									CodeCommands.AUTHENTICATE_WITH_KEY
 											.getCode(), 0x60, "FFFFFFFFFFFF", 33);
+							
+							//lesen des Names aus der Karte, Name in Textfield schreiben und ausgeben
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 									nameIndex);
 							tfirst_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							textarea.append("Name: "+tfirst_name.getText()+"\n");
 
+							//Lesen des Vornamen aus der Karte, Vorname in Textfield schreiben und ausgeben
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 									vornameIndex);
 							tlast_name.setText(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							textarea.append("Vorname: "+tlast_name.getText()+"\n");
 							
+							//Lesen der Kundennummer aus der Karte und in einen int umwandeln
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 									kundennrIndex);
 							
 							String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
 							int kundenNr = Integer.valueOf(nr);
 							
+							//Guthaben per Kundennummer aus der Datenbank holen
 							double guthaben = db.getGuthaben(conn, kundenNr);
 							
+							//Lesen des Guthaben aus der Karte und in double umwandeln
 							handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 									6);							
 							double guthaben_karte = Double.valueOf(handler.getBlockContent().replaceAll("[\u0000-\u001f]", ""));
 							
-							
+							//Guthaben vergleich von Karte und Datenbank(Datenbank liefert Ist-bzw Soll-Wert
+							//wenn Guthaben gleich ist wird fortgefahren, wenn nicht wird Vorgang abgebrochen
 							if(guthaben == guthaben_karte){
 								textarea.append("Guthaben: "+guthaben+"\n");
 								tcredit.setText(String.valueOf(guthaben));
@@ -233,28 +242,36 @@ public class BezahlGUI extends JFrame {
 				
 				if (handler.isConnected()) {
 					if(tcredit_add.getText().length() <= 16) {
+						
+						//Lesen der Kundennummer aus der Karte und in einen int umwandeln
 						handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 									kundennrIndex);
 							
 						String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
 						int kundenNr = Integer.valueOf(nr);
+						
+						
+						
+						//Neues Guthaben aus aktuellem Guthaben und zu erhöhendem Guthaben errechnen
 						double guthaben = db.getGuthaben(conn, kundenNr);
 						double add = Double.valueOf(tcredit_add.getText())+guthaben;
 						String neu = String.valueOf(add);
 						
+						//Neues Guthaben auf die Karte schreiben
 						handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
 								guthabenIndex, neu);
 						
+						//Neues Guthaben in die Datenbank schreiben
 						db.addGuthaben(conn, Double.valueOf(tcredit_add.getText()), kundenNr);
 						
-						long now = System.currentTimeMillis();
-						Calendar calendar = Calendar.getInstance();
-						calendar.clear();
-				        calendar.setTimeInMillis(now);				       
+						//Aktuelle Zeit
+						long now = System.currentTimeMillis();				       
 				        				        
+				        //Zeit in die Datenbank schreiben
 				        db.setTime(conn, now, kundenNr);
-				        String time = String.valueOf(now);
 				        
+				        //Zeit in auf die Karte schreiben
+				        String time = String.valueOf(now);				        
 				        handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
 								transIndex, time);
 				        
@@ -278,17 +295,21 @@ public class BezahlGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (handler.isConnected()) {
+					
+					//Lesen der Kundennummer aus der Karte und in einen int umwandeln
 					handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
 							kundennrIndex);
 					String nr = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
 					int kundenNr = Integer.valueOf(nr);
 					
-					handler.readBlock(CodeCommands.READ_BLOCK.getCode(),
-							guthabenIndex);
-					String guth = handler.getBlockContent().replaceAll("[\u0000-\u001f]", "");
-					double guthaben = Double.valueOf(guth);
+					//Guthaben per Kundennummer aus der Datenbank holen
+					double guthaben = db.getGuthaben(conn, kundenNr);
+					
+					//Zu zahlender Wert aus Textfield lesen und in double umwandeln
 					double pay = Double.valueOf(tpay.getText());
 					
+					//Vergleich ob Zu zahlender Wert größer als Aktuelles Guthaben ist,
+					//wenn ja wird der Vorgang abgebrochen
 					if(pay > guthaben){
 						textarea.append("Das Guthaben auf der Karte reicht nicht aus"+"\n");
 						textarea.append("Guthaben: "+guthaben+"\n");
@@ -296,21 +317,23 @@ public class BezahlGUI extends JFrame {
 						textarea.append("Das Guthaben muss aufgeladen werden"+"\n");
 						lsuccess_msg.setText("Guthaben error der Karte");lsuccess_msg.setForeground(Color.RED);
 					}else{
+						
+						//Neues Guthaben errechnen und auf die Karte schreiben
 						guthaben = guthaben - pay;
 						String neu = String.valueOf(guthaben);
 						handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
 								guthabenIndex, neu);
-						
+						//Neues Guthaben in die Datenbank schreiben
 						db.setGuthaben(conn, guthaben, kundenNr);
 						
-						long now = System.currentTimeMillis();
-						Calendar calendar = Calendar.getInstance();
-						calendar.clear();
-				        calendar.setTimeInMillis(now);				       
-				        				        
+						//Aktuelle Zeit
+						long now = System.currentTimeMillis();      
+				        				     
+						//Aktuelle Zeit in die Datenbank schreiben
 				        db.setTime(conn, now, kundenNr);
-				        String time = String.valueOf(now);
 				        
+				        //Aktuelle Zeit auf die Karte schreiben
+				        String time = String.valueOf(now);				        
 				        handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
 								transIndex, time);
 				        
@@ -357,6 +380,7 @@ public class BezahlGUI extends JFrame {
 
 }
 
+//Extra Klasse zum einloggen in die Admin GUI
 class login extends JFrame {
 
 	private JButton login;
