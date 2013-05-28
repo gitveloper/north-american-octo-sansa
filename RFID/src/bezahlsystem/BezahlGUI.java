@@ -144,7 +144,7 @@ public class BezahlGUI extends JFrame {
 		set_db = new JMenuItem("Set DB", KeyEvent.VK_S);
 		menu.add(set_db);
 
-		admin = new JMenu("Einstellungen");
+		admin = new JMenu("Settings");
 		menuBar.add(admin);
 		open_admin = new JMenuItem("Open Admin", KeyEvent.VK_A);
 		admin.add(open_admin);
@@ -161,9 +161,7 @@ public class BezahlGUI extends JFrame {
 		// Ausführen bei Knopfdruck: "open admin"
 		open_admin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				Login login = new Login();
-
 			}
 		});
 		
@@ -258,7 +256,7 @@ public class BezahlGUI extends JFrame {
 						
 						//Neues Guthaben aus aktuellem Guthaben und zu erhöhendem Guthaben errechnen
 						double guthaben = db.getGuthaben(conn, kundenNr);
-						double add = Double.valueOf(tcredit_add.getText())+guthaben;
+						double add = Double.valueOf(tcredit_add.getText().replace("-", ""))+guthaben;
 						String neu = formatGuthaben(add);
 						
 						//Neues Guthaben auf die Karte schreiben
@@ -277,11 +275,10 @@ public class BezahlGUI extends JFrame {
 				        //Zeit in auf die Karte schreiben
 				        String time = String.valueOf(now);				        
 				        handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
-								transIndex, time);
-				        
+								transIndex, time);        
 				        
 						
-						textarea.append(tcredit_add.getText()+" wurde auf die Karte gebucht\n");
+						textarea.append(tcredit_add.getText()+" wurde auf die Karte gebucht"+"\n");
 						lsuccess_msg.setText("Buchung erfolgreich"); lsuccess_msg.setForeground(Color.GREEN);
 						
 						tcredit_add.setText("");
@@ -307,12 +304,10 @@ public class BezahlGUI extends JFrame {
 					int kundenNr = Integer.valueOf(nr);
 					
 					//Guthaben per Kundennummer aus der Datenbank holen
-					double guthaben = db.getGuthaben(conn, kundenNr);
-					
-					
+					double guthaben = db.getGuthaben(conn, kundenNr);					
 					
 					//Zu zahlender Wert aus Textfield lesen und in double umwandeln
-					double pay = Double.valueOf(tpay.getText());
+					double pay = Double.valueOf(tpay.getText().replace("-", ""));
 					
 					//Vergleich ob Zu zahlender Wert größer als Aktuelles Guthaben ist,
 					//wenn ja wird der Vorgang abgebrochen
@@ -321,7 +316,8 @@ public class BezahlGUI extends JFrame {
 						textarea.append("Guthaben: "+guthaben+"\n");
 						textarea.append("Preis: "+pay+"\n");
 						textarea.append("Das Guthaben muss aufgeladen werden"+"\n");
-						lsuccess_msg.setText("Guthaben error der Karte");lsuccess_msg.setForeground(Color.RED);
+						lsuccess_msg.setText("Guthaben error der Karte");
+						lsuccess_msg.setForeground(Color.RED);
 					}else{
 						
 						//Neues Guthaben errechnen und auf die Karte schreiben
@@ -354,10 +350,7 @@ public class BezahlGUI extends JFrame {
 				}
 				
 			}
-		});
-
-
-		
+		});		
 
 		this.setTitle("RFIDPAY");
 		this.setSize(600, 400);
@@ -429,7 +422,7 @@ class Login extends JFrame {
 
 			}
 		});
-		this.setTitle("Administration");
+		this.setTitle("Settings");
 		this.setSize(250, 100);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
