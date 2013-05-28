@@ -30,21 +30,28 @@ public class Splash extends JFrame implements Runnable {
 		setVisible(true);
 		
 		System.out.println("Starte Splash!");
-		dispose();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			dispose();
+		}
+		
 		new BezahlGUI(new ReaderHandler(), new DBHandler());
 	}
 
 	public void paint(Graphics g) {		
 		for(int i=0;i<=frames;i++) {
-			Image sImage = new ImageIcon(getClass().getResource("../resources/frame"+i+".png")).getImage();
+			Image sImage = new ImageIcon(getClass().getResource("../resources/splash.png")).getImage();
 			g.drawImage(sImage, 0, 0, this);
-			g.dispose();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			g.dispose();
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 	}
 	
