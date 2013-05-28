@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -41,6 +42,8 @@ public class BezahlGUI extends JFrame {
 
 	private int b_height = 20;
 	private int b_width = 100;
+	
+	private DecimalFormat format = new DecimalFormat("#0.00");
 
 	public static ReaderHandler handler;
 	private DBHandler db;
@@ -141,11 +144,11 @@ public class BezahlGUI extends JFrame {
 		set_db = new JMenuItem("Set DB", KeyEvent.VK_S);
 		menu.add(set_db);
 
-		admin = new JMenu("admin");
+		admin = new JMenu("Einstellungen");
 		menuBar.add(admin);
-		open_admin = new JMenuItem("open Admin", KeyEvent.VK_A);
+		open_admin = new JMenuItem("Open Admin", KeyEvent.VK_A);
 		admin.add(open_admin);
-		open_db = new JMenuItem("open DB", KeyEvent.VK_D);
+		open_db = new JMenuItem("Open DB", KeyEvent.VK_D);
 		admin.add(open_db);
 
 		// Ausführen bei Knopfdruck: "New DB"
@@ -159,7 +162,7 @@ public class BezahlGUI extends JFrame {
 		open_admin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				login login = new login();
+				Login login = new Login();
 
 			}
 		});
@@ -214,7 +217,7 @@ public class BezahlGUI extends JFrame {
 							//wenn Guthaben gleich ist wird fortgefahren, wenn nicht wird Vorgang abgebrochen
 							if(guthaben == guthaben_karte){
 								textarea.append("Guthaben: "+guthaben+"\n");
-								tcredit.setText(String.valueOf(guthaben));
+								tcredit.setText(formatGuthaben(guthaben));
 								lsuccess_msg.setText("Kartendaten OK"); lsuccess_msg.setForeground(Color.GREEN);
 								
 							}else{
@@ -222,7 +225,8 @@ public class BezahlGUI extends JFrame {
 								textarea.append("Guthaben: "+guthaben+"\n");
 								textarea.append("Guthaben Karte: "+guthaben_karte+"\n");
 								textarea.append("Bitte verwahren sie die Karte"+"\n");
-								lsuccess_msg.setText("Guthaben error der Karte");lsuccess_msg.setForeground(Color.RED);
+								lsuccess_msg.setText("Guthaben error der Karte");
+								lsuccess_msg.setForeground(Color.RED);
 								handler.reset(CodeCommands.RESET.getCode());
 							}
 							
@@ -255,7 +259,7 @@ public class BezahlGUI extends JFrame {
 						//Neues Guthaben aus aktuellem Guthaben und zu erhöhendem Guthaben errechnen
 						double guthaben = db.getGuthaben(conn, kundenNr);
 						double add = Double.valueOf(tcredit_add.getText())+guthaben;
-						String neu = String.valueOf(add);
+						String neu = formatGuthaben(add);
 						
 						//Neues Guthaben auf die Karte schreiben
 						handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
@@ -277,7 +281,7 @@ public class BezahlGUI extends JFrame {
 				        
 				        
 						
-						textarea.append(tcredit_add.getText()+" wurde auf die Karte gebucht");
+						textarea.append(tcredit_add.getText()+" wurde auf die Karte gebucht\n");
 						lsuccess_msg.setText("Buchung erfolgreich"); lsuccess_msg.setForeground(Color.GREEN);
 						
 						tcredit_add.setText("");
@@ -305,6 +309,8 @@ public class BezahlGUI extends JFrame {
 					//Guthaben per Kundennummer aus der Datenbank holen
 					double guthaben = db.getGuthaben(conn, kundenNr);
 					
+					
+					
 					//Zu zahlender Wert aus Textfield lesen und in double umwandeln
 					double pay = Double.valueOf(tpay.getText());
 					
@@ -320,7 +326,7 @@ public class BezahlGUI extends JFrame {
 						
 						//Neues Guthaben errechnen und auf die Karte schreiben
 						guthaben = guthaben - pay;
-						String neu = String.valueOf(guthaben);
+						String neu = formatGuthaben(guthaben);
 						handler.writeBlock(CodeCommands.WRITE_BLOCK.getCode(),
 								guthabenIndex, neu);
 						//Neues Guthaben in die Datenbank schreiben
@@ -373,15 +379,15 @@ public class BezahlGUI extends JFrame {
 		scrollpane.setBounds(20, 120, 500, 200);
 		return scrollpane;
 	}
-
-	public static void main(String[] args) {
-		BezahlGUI gui = new BezahlGUI();
+	
+	private String formatGuthaben(double guthaben) {		
+		String formatted = format.format(guthaben).replace(",", ".");
+		return formatted;		
 	}
-
 }
 
 //Extra Klasse zum einloggen in die Admin GUI
-class login extends JFrame {
+class Login extends JFrame {
 
 	private JButton login;
 	private JTextField login_text;
@@ -391,7 +397,7 @@ class login extends JFrame {
 	private int b_width = 100;
 	private String pw = "admin";
 
-	public login() {
+	public Login() {
 		init();
 	}
 
@@ -401,7 +407,7 @@ class login extends JFrame {
 		panel.setLayout(null);
 		this.getContentPane().add(panel);
 
-		login = new JButton("login");
+		login = new JButton("Login");
 		login.setBounds(20, 20, b_width, b_height);
 		panel.add(login);
 
@@ -423,7 +429,8 @@ class login extends JFrame {
 
 			}
 		});
-		this.setTitle("RFID Reader (Mifare Classic 4k)");
+		this.setTitle("Administration");
+		this.setSize(250, 100);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setSize(300, 100);

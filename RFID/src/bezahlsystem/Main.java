@@ -1,5 +1,7 @@
 package bezahlsystem;
 
+import java.text.DecimalFormat;
+
 import datenbank.DBHandler;
 import mifareReader.handler.ReaderHandler;
 

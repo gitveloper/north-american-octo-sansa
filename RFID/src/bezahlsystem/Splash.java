@@ -31,7 +31,7 @@ public class Splash extends JFrame implements Runnable {
 		
 		System.out.println("Starte Splash!");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			dispose();
 		}
