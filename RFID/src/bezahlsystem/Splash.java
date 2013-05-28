@@ -15,9 +15,9 @@ import datenbank.DBHandler;
 
 public class Splash extends JFrame implements Runnable {
 	
-	private static final long serialVersionUID = 4386862497293410112L;
-	
-	SplashScreen ss = SplashScreen.getSplashScreen();
+	private static final long serialVersionUID = 4386862497293410112L;	
+	private SplashScreen ss = SplashScreen.getSplashScreen();	
+	private int frames = 4;
 
 	public void run(){
 		
@@ -30,19 +30,22 @@ public class Splash extends JFrame implements Runnable {
 		setVisible(true);
 		
 		System.out.println("Starte Splash!");
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			dispose();
-		}
 		dispose();
 		new BezahlGUI(new ReaderHandler(), new DBHandler());
 	}
 
-	public void paint(Graphics g) {
-		Image sImage = new ImageIcon(getClass().getResource("../resources/splash.gif")).getImage();
-
-		g.drawImage(sImage, 0, 0, this);
+	public void paint(Graphics g) {		
+		for(int i=0;i<=frames;i++) {
+			Image sImage = new ImageIcon(getClass().getResource("../resources/frame"+i+".png")).getImage();
+			g.drawImage(sImage, 0, 0, this);
+			g.dispose();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }
