@@ -40,7 +40,7 @@ public class Splash extends JFrame implements Runnable {
 	}
 
 	public void paint(Graphics g) {
-		Image sImage = new ImageIcon(getClass().getResource("../resources/splash.png")).getImage();
+		Image sImage = new ImageIcon(getClass().getResource("../resources/splash.gif")).getImage();
 
 		g.drawImage(sImage, 0, 0, this);
 	}
