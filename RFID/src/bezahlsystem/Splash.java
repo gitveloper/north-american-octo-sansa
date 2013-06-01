@@ -7,11 +7,12 @@ import java.awt.SplashScreen;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import mifareReader.handler.ReaderHandler;
 import datenbank.DBHandler;
 
-public class Splash extends JFrame implements Runnable {
+public class Splash extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = 4386862497293410112L;
 	private SplashScreen ss = SplashScreen.getSplashScreen();
@@ -20,30 +21,37 @@ public class Splash extends JFrame implements Runnable {
 			"frame3.png", "frame0.png", "frame3.png" };
 
 	private Image sImage;
+	
+	private JFrame frame;
 
 	public void run() {
 		
-		setSize(550, 550);
-		setLocationRelativeTo(null);
-		setUndecorated(true);
-		setBackground(new Color(1.0f, 1.0f, 1.0f, 0f));
-		setVisible(true);
+		frame = new JFrame();
+		
+		frame.getContentPane().add(this);
+		
+		frame.setSize(550, 550);
+		frame.setLocationRelativeTo(null);
+		frame.setUndecorated(true);
+		frame.setBackground(new Color(1.0f, 1.0f, 1.0f, 0f));
+		frame.setVisible(true);
+		frame.setAlwaysOnTop(true);
+		frame.toFront();
 
 		System.out.println("Starte Splash!");
 		
 		try {			
 			for (int i = 0; i < frames.length; i++) {	
 
-				sImage = new ImageIcon(getClass().getResource("../resources/" + frames[i])).getImage();
+				sImage = new ImageIcon(getClass().getResource("../resources/" + frames[i])).getImage();				
 				
-				this.revalidate();
-				this.repaint();
+				System.out.println("...");
 				
-				System.out.println("...");				
+				repaint();
+				
+				sImage.flush();
 				
 				Thread.sleep(450);
-				sImage = null;
-
 			}			
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -51,14 +59,14 @@ public class Splash extends JFrame implements Runnable {
 			e.printStackTrace();
 		}
 		
-		dispose();
+		frame.dispose();
 		
 		new BezahlGUI(new ReaderHandler(), new DBHandler());
 	}
 
 	public void paint(Graphics g) {
 		g.drawImage(sImage, 0, 0, null);
-		g.dispose();
+		g.dispose();		
 	}
 
 }
