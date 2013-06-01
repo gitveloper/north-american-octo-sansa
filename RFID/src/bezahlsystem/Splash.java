@@ -4,55 +4,61 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.SplashScreen;
-import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JWindow;
 
 import mifareReader.handler.ReaderHandler;
 import datenbank.DBHandler;
 
 public class Splash extends JFrame implements Runnable {
-	
-	private static final long serialVersionUID = 4386862497293410112L;	
-	private SplashScreen ss = SplashScreen.getSplashScreen();	
-	private int frames = 4;
 
-	public void run(){
+	private static final long serialVersionUID = 4386862497293410112L;
+	private SplashScreen ss = SplashScreen.getSplashScreen();
+
+	private String[] frames = new String[] { "frame0.png", "frame1.png", "frame2.png",
+			"frame3.png", "frame0.png", "frame3.png" };
+
+	private Image sImage;
+
+	public void run() {
 		
-		
-//		setBackground(new Color(0, 0, 0, 0));
 		setSize(550, 550);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
-		setBackground(new Color(1.0f,1.0f,1.0f,0f));
+		setBackground(new Color(1.0f, 1.0f, 1.0f, 0f));
 		setVisible(true);
-		
+
 		System.out.println("Starte Splash!");
-		try {
-			Thread.sleep(5000);
+		
+		try {			
+			for (int i = 0; i < frames.length; i++) {	
+
+				sImage = new ImageIcon(getClass().getResource("../resources/" + frames[i])).getImage();
+				
+				this.revalidate();
+				this.repaint();
+				
+				System.out.println("...");				
+				
+				Thread.sleep(450);
+				sImage = null;
+
+			}			
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			dispose();
 		}
+		
+		dispose();
 		
 		new BezahlGUI(new ReaderHandler(), new DBHandler());
 	}
 
-	public void paint(Graphics g) {		
-		for(int i=0;i<=frames;i++) {
-			Image sImage = new ImageIcon(getClass().getResource("../resources/splash.png")).getImage();
-			g.drawImage(sImage, 0, 0, this);
-//			g.dispose();
-//			try {
-//				Thread.sleep(1000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		}
+	public void paint(Graphics g) {
+		g.drawImage(sImage, 0, 0, null);
+		g.dispose();
 	}
-	
+
 }
