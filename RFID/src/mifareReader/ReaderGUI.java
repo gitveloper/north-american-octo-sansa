@@ -99,7 +99,7 @@ public class ReaderGUI extends JFrame {
 					String port = JOptionPane.showInputDialog(null,
 							"Available ports: " + handler.showAvailablePorts(),
 							handler.getDefaultPort());
-					if (port != null) {
+					if (port != null && port != "" && port.length() > 0) {
 						if (handler.showAvailablePorts().contains(port)) {
 							handler.start(port);
 							handler.reset(CodeCommands.RESET.getCode());
