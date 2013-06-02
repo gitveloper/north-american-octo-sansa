@@ -221,10 +221,14 @@ public class ReaderHandler {
 		
 		List<String> ports = device.getAvailablePorts();		
 		String aPorts = "";		
-		for(int i=0;i<ports.size();i++) {
-			aPorts += ports.get(i) + ", ";
+		for(int i=0;i<ports.size();i++) {			
+			if(ports.size()-1 == i) {
+				aPorts += ports.get(i);
+			} else {
+				aPorts += ports.get(i) + ", ";
+			}
 		}		
-		aPorts = (String) aPorts.subSequence(0, aPorts.length()-2);
+		//aPorts = (String) aPorts.subSequence(0, aPorts.length()-2);
 		
 		return aPorts;
 	}
