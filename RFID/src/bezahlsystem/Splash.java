@@ -20,7 +20,7 @@ public class Splash extends JPanel implements Runnable {
 	private String[] frames = new String[] { "frame0.png", "frame1.png", "frame2.png",
 			"frame3.png", "frame0.png", "frame3.png" };
 
-	private Image sImage;
+	private Image sImage = new ImageIcon(getClass().getResource("../resources/splash.png")).getImage();
 	
 	private JFrame frame;
 
@@ -40,19 +40,26 @@ public class Splash extends JPanel implements Runnable {
 
 		System.out.println("Starte Splash!");
 		
-		try {			
-			for (int i = 0; i < frames.length; i++) {	
-
-				sImage = new ImageIcon(getClass().getResource("../resources/" + frames[i])).getImage();				
-				
-				System.out.println("...");
-				
-				repaint();
-				
-				sImage.flush();
-				
-				Thread.sleep(450);
-			}			
+//		try {			
+//			for (int i = 0; i < frames.length; i++) {	
+//
+//				sImage = new ImageIcon(getClass().getResource("../resources/" + frames[i])).getImage();				
+//				
+//				System.out.println("...");
+//				
+//				repaint();
+//				
+//				sImage.flush();
+//				
+//				Thread.sleep(450);
+//			}			
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
