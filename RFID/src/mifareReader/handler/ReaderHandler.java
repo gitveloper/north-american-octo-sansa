@@ -229,6 +229,9 @@ public class ReaderHandler {
 			}
 		}		
 		//aPorts = (String) aPorts.subSequence(0, aPorts.length()-2);
+		if(aPorts.length() == 0) {
+			return "none";
+		}
 		
 		return aPorts;
 	}
