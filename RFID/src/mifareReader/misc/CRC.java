@@ -1,3 +1,8 @@
+/**
+ * CRC.java
+ * --------------------------
+ * Berechnung der ERROR CHECKS.
+ */
 package mifareReader.misc;
 
 public class CRC {

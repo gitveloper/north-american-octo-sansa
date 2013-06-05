@@ -1,6 +1,7 @@
 /**
  * Device.java
  * --------------------------
+ * Reader Funktionalitaet.
  */
 package mifareReader;
 
@@ -154,7 +155,7 @@ public class Device {
 	// DATA
 
 	/**
-	 * 
+	 * Stellt ein Query fuer die geforderte Funktion
 	 * @param query Datenarray fuer den Reader
 	 */
 	public void query(byte[] query) {
@@ -169,7 +170,7 @@ public class Device {
 	}
 
 	/**
-	 * 
+	 * Ruft den Report entsprechend des CodeCommands ab
 	 * @param code
 	 */
 	public void report(int code) {
@@ -181,7 +182,7 @@ public class Device {
 	}
 
 	/*
-	 * 
+	 * Prueft ob zur Zeit Daten uebertragen werden
 	 */
 	public void listen() {
 		long start = System.currentTimeMillis();
@@ -193,7 +194,7 @@ public class Device {
 	}
 
 	/*
-	 * 
+	 * Prueft ob der DatenStream verfuegbar ist und verarbeitet gegebenenfalls die Daten
 	 */
 	public void dataStreamAvailable() {
 		try {

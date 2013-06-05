@@ -1,3 +1,8 @@
+/**
+ * ReaderHandler.java
+ * --------------------------
+ * Reader und Karten Funktionen.
+ */
 package mifareReader.handler;
 
 import java.math.BigInteger;
@@ -43,11 +48,18 @@ public class ReaderHandler {
 	
 	// INIT
 
+	/**
+	 * Startet die Verbindung zum SerialPort und damit zum Reader
+	 * @param port SerialPort (default: COM3)
+	 */
 	public void start(String port) {
 		device.connect(port);
 		rh = device.getReportHandler();
 	}
 
+	/*
+	 * Stopp serielle Verbindung
+	 */
 	public void stop() {
 		device.disconnect();
 	}
@@ -56,7 +68,7 @@ public class ReaderHandler {
 	// GNet/Mifare Commands
 	
 	/**
-	 * 
+	 * Erfragt den Status des Lesegeraetes
 	 * @param code
 	 */
 	public void polling(int code) {
@@ -65,7 +77,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Funktion um die Firmware Version des Lesegeraetes zu erhalten
 	 * @param code
 	 */
 	public void getVersion(int code) {
@@ -75,7 +87,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Mifare Funktion fuer die Card Class
 	 * @param code
 	 */
 	public void request(int code) {
@@ -84,7 +96,7 @@ public class ReaderHandler {
 	}
 	
 	/**
-	 * 
+	 * Funktion um die Seriennummer der Karte zu erhalten
 	 * @param code
 	 */
 	public void antiCollision(int code) {
@@ -93,7 +105,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Waehlt Karte anhand der Seriennummer aus
 	 * @param code
 	 */
 	public void selectCard(int code) {
@@ -106,7 +118,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Authentifiziert die Karte mit dem ausgewaehlten Key fuer einen Sektor
 	 * @param code
 	 * @param key_type
 	 * @param key
@@ -118,7 +130,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Liest einen Block
 	 * @param code
 	 * @param block
 	 */
@@ -130,7 +142,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Schreibt einen Block
 	 * @param code
 	 * @param block
 	 * @param input
@@ -141,7 +153,7 @@ public class ReaderHandler {
 	}
 
 	/**
-	 * 
+	 * Setzt die Karte und das Lesegeraet zurueck
 	 * @param code
 	 */
 	public void reset(int code) {
@@ -162,6 +174,7 @@ public class ReaderHandler {
 		int[] prep = new int[key_buffer.length + 2];
 		prep[0] = type;
 		prep[1] = sector;
+		// Kopiert key_buffer in prep array
 		System.arraycopy(key_buffer, 0, prep, 2, key_buffer.length);
 
 		return prep;
@@ -201,13 +214,15 @@ public class ReaderHandler {
 		return prep;
 	}
 	
+	/*
+	 * Seriennummer von HEX zu LONG Wert
+	 */
 	public String showSerialnumber() {
 		int[] snarray = rh.getSerialNumer();
 		String sn = "";
 		for (int i = 0; i < snarray.length; i++) {
 			sn += Integer.toHexString(snarray[i]);
-		}
-		
+		}		
 		long sn_long = Long.parseLong(sn, 16);
 		
 		return ""+sn_long;
@@ -217,6 +232,9 @@ public class ReaderHandler {
 		return device.getSerialPortInfo();
 	}
 	
+	/*
+	 * Gibt eine Liste der verfuegbaren Ports zurueck
+	 */
 	public String showAvailablePorts() {
 		
 		List<String> ports = device.getAvailablePorts();		
@@ -236,8 +254,7 @@ public class ReaderHandler {
 		return aPorts;
 	}
 	
-	public String showLongValue(byte[] data) {
-		
+	public String showLongValue(byte[] data) {		
 		return "";
 	}
 

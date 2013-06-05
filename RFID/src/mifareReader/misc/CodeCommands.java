@@ -1,3 +1,9 @@
+/**
+ * CodeCommands.java
+ * --------------------------
+ * Enhaelt eine Auswahl der GNetPlus und Mifare CodeCommands 
+ * die fuer diese Programm erforderlich sind.
+ */
 package mifareReader.misc;
 
 public enum CodeCommands {

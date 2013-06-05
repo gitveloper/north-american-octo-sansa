@@ -1,3 +1,8 @@
+/**
+ * ReportHandler.java
+ * --------------------------
+ * Verarbeitet Reports.
+ */
 package mifareReader.handler;
 
 import java.util.Arrays;
@@ -43,7 +48,7 @@ public class ReportHandler {
 	// REPORTS
 	
 	/**
-	 * 
+	 * Fuegt Report zur ReportListe hinzu
 	 * @param r
 	 */
 	public void addReport(Report r) {
@@ -51,7 +56,7 @@ public class ReportHandler {
 	}
 
 	/**
-	 * 
+	 * Fuegt Report zur ReportListe hinzu
 	 * @param r
 	 * @param reset_required
 	 */
@@ -60,6 +65,10 @@ public class ReportHandler {
 		this.reset_required = reset_required;
 	}
 	
+	/**
+	 * Verarbeitet Reports anhand der QueryCodes
+	 * @param code QueryCode
+	 */
 	public void createReadableReport(int code) {
 		
 		for(int i=0;i<reports.size();i++) {
@@ -130,58 +139,9 @@ public class ReportHandler {
 		reports.clear();
 		
 	}
-
-	/**
-	 * 
-	 * @param code
-	 */
-//	public void createReadableReport(int code) {
-//
-//		for (int i = 0; i < reports.size(); i++) {
-//			
-//			// Ausgabe aller vorhandenen Reports in der Konsole
-//			System.out.println(reports.get(i).toString());
-//
-//			
-//			if (reports.get(i).getDataLength() > 0) {
-//				if (reports.get(i).getDataBytes()[0] == CodeCommands.CARD_DETECTED
-//						.getCode()) {
-//					card_detected = true;
-//					reports.remove(i);
-//				}
-//				if (reports.get(i).getDataBytes()[0] == CodeCommands.CARD_REMOVED
-//						.getCode()) {
-//					card_detected = false;
-//					reports.remove(i);
-//				}
-//			}
-//
-//			if (card_detected && (reports.get(i).getDataLength() > 0)) {
-//				if (reports.get(i).getCode_buffer() == CodeCommands.ANTI_COLLISION
-//						.getCode()) {
-//					snBytes = reports.get(i).getDataBytes();
-//					sn_available = true;
-//				} else {
-//					sn_available = false;
-//				}
-//				if (reports.get(i).getCode_buffer() == CodeCommands.GET_VERSION
-//						.getCode()) {
-//					firmware_version = hexToString(reports.get(i)
-//							.getDataBytes());
-//				}
-//				if (reports.get(i).getCode_buffer() == CodeCommands.REQUEST
-//						.getCode()) {
-//					ccBytes = reports.get(i).getDataBytes();
-//				}
-//				if (reports.get(i).getCode_buffer() == CodeCommands.WRITE_BLOCK.getCode()) {
-//					block_content = hexToString(reports.get(i).getDataBytes());
-//				}
-//			}
-//		}
-//	}
 	
 	/**
-	 * 
+	 * Wandelt HEX Werte in lesbaren String um
 	 * @param dataBytes
 	 * @return
 	 */

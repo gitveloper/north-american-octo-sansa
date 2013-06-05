@@ -1,13 +1,14 @@
+/**
+ * DataStreamHandler.java
+ * --------------------------
+ * Schreibt und sendet Daten.
+ */
 package mifareReader.handler;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
 
 import mifareReader.Report;
-
 
 public class DataStreamHandler {
 	
@@ -25,6 +26,10 @@ public class DataStreamHandler {
 		this.out = out;
 	}
 	
+	/**
+	 * Schreibt Daten in den Stream
+	 * @param query Byte array
+	 */
 	public void request(byte[] query) {
 		try {		
 			code_buffer = query[2];
@@ -56,6 +61,7 @@ public class DataStreamHandler {
 				crc[1] = in.read();
 				
 //				Report r = new Report(soh, address, queryFunction, dataLength, dataBytes, crc);
+				// Erzeut ein Report Objekt mit den relevaten Daten.
 				Report r = new Report(soh, address, queryFunction, dataLength, dataBytes, crc, code_buffer);
 				
 //				System.out.println(r.toString());
